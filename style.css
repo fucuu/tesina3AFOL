@@ -1,0 +1,311 @@
+/* =========================================================
+   Alessandro Arena · Sito personale
+   Indice:
+   1  Token (colori, font, spazi)
+   2  Base e reset
+   3  Tipografia
+   4  Utility (container, sr-only, skip-link)
+   5  Header e navigazione
+   6  Bottoni
+   7  Ritratto (foto con fallback)
+   8  Hero
+   9  Sezioni e card
+   9b Progetti (Home)
+   10 Layout con sidebar (CV, Tesina)
+   11 Componenti del CV
+   12 Componenti della Tesina
+   13 Footer
+   14 Breakpoint (tablet, desktop)
+   15 Preferenze utente e stampa
+   ========================================================= */
+
+/* ===== 1. Token: cambia qui colori, font e spaziature ===== */
+:root {
+  color-scheme: light;
+
+  --bg: #F2F5FA;
+  --surface: #FFFFFF;
+  --ink: #12203A;
+  --muted: #52617A;
+  --primary: #2745F5;
+  --primary-dark: #1B33C4;
+  --marker: #D9F94A;
+  --border: #D8DFEB;
+
+  --radius: 14px;
+  --radius-sm: 10px;
+  --max: 1120px;
+  --header-h: 4.25rem;
+  --space-section: clamp(3.5rem, 8vw, 6rem);
+  --space-block: clamp(3rem, 6vw, 4.5rem);
+
+  --font-title: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-text: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+/* ===== 2. Base e reset ===== */
+*, *::before, *::after { box-sizing: border-box; }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 1.5rem);
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font: 1.0625rem/1.75 var(--font-text);
+  color: var(--ink);
+  background: var(--bg);
+}
+main { flex: 1; }
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--primary); }
+a:hover { color: var(--primary-dark); }
+:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+
+/* ===== 3. Tipografia ===== */
+h1, h2, h3, h4 { font-family: var(--font-title); line-height: 1.2; margin: 0; }
+h1 { font-size: clamp(2.5rem, 7vw, 4.25rem); font-weight: 800; letter-spacing: -.02em; margin-bottom: 1.5rem; }
+h2 { font-size: clamp(1.75rem, 4vw, 2.4rem); font-weight: 800; margin-bottom: 1.5rem; }
+h3 { font-size: 1.3rem; font-weight: 600; margin-bottom: .75rem; }
+h4 { font: 500 .85rem/1.4 var(--font-mono); color: var(--muted); margin-bottom: 1rem; }
+p { margin: 0 0 1.5rem; max-width: 66ch; }
+p:last-child { margin-bottom: 0; }
+.hl { background: linear-gradient(transparent 55%, var(--marker) 55%); padding: 0 .1em; }
+.eyebrow { font: 500 .85rem/1.4 var(--font-mono); color: var(--muted); margin-bottom: 1rem; }
+.lead { font-size: 1.2rem; line-height: 1.7; color: var(--muted); margin-bottom: 2rem; }
+
+/* ===== 4. Utility ===== */
+.container { width: min(100% - 2.5rem, var(--max)); margin-inline: auto; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.skip-link { position: absolute; left: 1rem; top: -4rem; background: var(--ink); color: #fff; padding: .5rem 1rem; border-radius: 6px; z-index: 100; }
+.skip-link:focus { top: 1rem; color: #fff; }
+
+/* ===== 5. Header e navigazione (3 voci: sempre in orizzontale) ===== */
+.site-header {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  height: var(--header-h);
+  padding-inline: max(1.25rem, calc((100% - var(--max)) / 2));
+  background: rgba(242, 245, 250, .94);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid transparent;
+  transition: border-color .2s;
+}
+.site-header.scrolled { border-bottom-color: var(--border); }
+.logo { font: 800 1.35rem/1 var(--font-title); color: var(--ink); text-decoration: none; }
+.logo:hover { color: var(--primary); }
+.site-nav ul { display: flex; gap: 1.25rem; }
+.site-nav a { display: block; padding: .5rem .15rem; color: var(--ink); text-decoration: none; font-weight: 500; }
+.site-nav a:hover { color: var(--primary); }
+.site-nav a[aria-current="page"] {
+  color: var(--primary); font-weight: 600;
+  text-decoration: underline; text-decoration-thickness: 3px;
+  text-underline-offset: 8px; text-decoration-color: var(--marker);
+}
+
+/* ===== 6. Bottoni ===== */
+.btn { display: inline-block; padding: .9rem 1.75rem; border: 2px solid var(--primary); border-radius: var(--radius-sm); font-weight: 600; line-height: 1.4; text-decoration: none; transition: background .15s, color .15s; }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); color: #fff; }
+.btn-secondary { background: transparent; color: var(--primary); }
+.btn-secondary:hover { background: var(--primary); color: #fff; }
+.cta-group { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2rem; }
+
+/* ===== 7. Ritratto: iniziali dietro la foto (fallback se manca) ===== */
+.portrait {
+  position: relative; display: grid; place-items: center;
+  width: 5.5rem; aspect-ratio: 1; flex-shrink: 0;
+  border-radius: 50%; overflow: hidden;
+  background: var(--ink); color: #fff;
+  font: 800 1.5rem/1 var(--font-title); letter-spacing: -.02em;
+}
+.portrait img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.portrait-lg { width: min(100%, 22.5rem); margin-inline: auto; font-size: 4rem; box-shadow: 14px 14px 0 var(--marker); }
+
+/* ===== 8. Hero ===== */
+.hero { margin-block: 2rem var(--space-section); display: grid; gap: 3rem; align-items: center; }
+.page-hero { padding: clamp(3rem, 7vw, 5rem) 0 clamp(2.5rem, 5vw, 3.5rem); background: var(--surface); border-bottom: 1px solid var(--border); }
+.page-hero .lead:last-child { margin-bottom: 0; }
+
+/* ===== 9. Sezioni e card ===== */
+.section { padding-block: var(--space-section); }
+.section.alt { background: var(--surface); border-block: 1px solid var(--border); }
+.section-title { margin-bottom: 2.5rem; }
+.split { display: grid; gap: 3rem; }
+.facts { display: grid; gap: 1.25rem; align-content: start; }
+.facts li { padding: 1.25rem 1.5rem; background: var(--surface); border-left: 4px solid var(--marker); border-radius: 0 var(--radius) var(--radius) 0; color: var(--muted); line-height: 1.5; }
+.facts strong { display: block; font: 800 1.5rem var(--font-title); color: var(--ink); margin-bottom: .25rem; }
+
+.grid { display: grid; gap: 1.75rem; }
+.card {
+  --card-bg: var(--surface);
+  --chip-bg: var(--bg);
+  display: flex; flex-direction: column; align-items: flex-start;
+  padding: 2rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border); border-radius: var(--radius);
+}
+.section.alt .card { --card-bg: var(--bg); --chip-bg: var(--surface); }
+.card > .badges { margin-bottom: 1.75rem; }
+.card > .btn { margin-top: auto; }
+
+.badges { display: flex; flex-wrap: wrap; gap: .75rem; }
+.badges li { font: 500 .9rem/1.3 var(--font-mono); padding: .45rem .95rem; background: var(--chip-bg, var(--surface)); border: 1px solid var(--border); border-radius: 999px; }
+.tags { font: 500 .9rem var(--font-mono); color: var(--muted); }
+
+/* ===== 9b. Progetti (Home) ===== */
+.project { display: grid; gap: 3rem; padding: 2rem; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); }
+.project h3 { font-size: 1.6rem; }
+.project h4 { margin: 2rem 0 .85rem; }
+.project code { font: 500 .9em var(--font-mono); padding: .1em .4em; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; }
+.project-tags { margin-top: 2rem; }
+.project-next { margin-top: 1.75rem; }
+
+.steps { counter-reset: step; display: grid; gap: .85rem; }
+.steps li { counter-increment: step; position: relative; padding-left: 2.5rem; line-height: 1.55; }
+.steps li::before { content: counter(step); position: absolute; left: 0; top: .1em; display: grid; place-items: center; width: 1.7rem; height: 1.7rem; border-radius: 50%; background: var(--marker); color: var(--ink); font: 500 .85rem/1 var(--font-mono); }
+
+/* Anteprima giocabile: telefono con iframe (solo da desktop, come il PDF) */
+.project-demo { display: none; }
+.phone { width: 21rem; max-width: 100%; height: 40rem; margin-inline: auto; overflow: hidden; background: #1f4229; border: 10px solid var(--ink); border-radius: 36px; box-shadow: 14px 14px 0 var(--marker); }
+.phone iframe { display: block; width: 100%; height: 100%; border: 0; }
+.demo-actions { display: flex; justify-content: center; margin-top: 2rem; }
+.btn-sm { padding: .55rem 1.25rem; font-size: .95rem; cursor: pointer; font-family: inherit; }
+.project-demo .note { text-align: center; margin-inline: auto; }
+
+/* ===== 10. Layout con sidebar (CV, Tesina) ===== */
+.layout { display: grid; gap: 2.5rem; padding-block: 2.5rem var(--space-section); }
+.sidebar { display: grid; gap: 1.75rem; align-content: start; }
+.profile { display: flex; align-items: center; gap: 1rem; }
+.profile-name { margin: 0; font: 800 1.2rem/1.2 var(--font-title); }
+.profile-role { margin: .25rem 0 0; font: 500 .85rem/1.4 var(--font-mono); color: var(--muted); }
+
+.toc-title { margin-bottom: .75rem; font: 500 .85rem/1.4 var(--font-mono); color: var(--muted); }
+.toc ul { display: flex; flex-wrap: wrap; gap: .6rem; }
+.toc a { display: block; padding: .5rem 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; color: var(--ink); font-size: .95rem; line-height: 1.4; text-decoration: none; }
+.toc a:hover { border-color: var(--primary); }
+.toc a[aria-current="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+
+.block { padding-bottom: var(--space-block); margin-bottom: var(--space-block); border-bottom: 1px solid var(--border); }
+.block:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: 0; }
+.block > h2 { margin-bottom: 2rem; }
+.block.highlight { padding: 2rem; background: var(--surface); border: 0; border-left: 6px solid var(--marker); border-radius: 0 var(--radius) var(--radius) 0; }
+address { font-style: normal; }
+address p { margin-bottom: .75rem; }
+
+/* ===== 11. Componenti del CV ===== */
+/* Dati rapidi (etichetta / valore) */
+.data { display: grid; gap: 1rem; margin: 2rem 0 0; }
+.data div { padding: 1rem 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.data dt { font: 500 .8rem var(--font-mono); color: var(--muted); margin-bottom: .35rem; }
+.data dd { margin: 0; font-weight: 600; line-height: 1.5; }
+
+/* Timeline: data sopra (mobile) o a sinistra (tablet+), scheda a destra */
+.timeline { display: grid; gap: 1.5rem; }
+.timeline li { display: grid; gap: .75rem; }
+.timeline time { font: 500 .9rem var(--font-mono); color: var(--primary); }
+.timeline .entry { padding: 1.75rem 2rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+.timeline .entry h3 { margin-bottom: .35rem; }
+.timeline .where { margin-bottom: 1.25rem; font-size: .95rem; color: var(--muted); }
+.timeline h4 { margin: 1.5rem 0 .75rem; }
+
+/* Liste con segno di spunta */
+.check-list { display: grid; gap: .85rem; }
+.check-list li { position: relative; padding-left: 1.9rem; line-height: 1.55; }
+.check-list li::before { content: ""; position: absolute; left: .15rem; top: .4em; width: .6rem; height: .35rem; border-left: 2px solid var(--primary); border-bottom: 2px solid var(--primary); transform: rotate(-45deg); }
+
+/* Competenze: gruppi etichettati dentro le card */
+.skill-group { width: 100%; }
+.skill-group + .skill-group { margin-top: 2rem; }
+
+/* Tabella lingue */
+.lang-table { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.lang-table th, .lang-table td { padding: 1rem 1.5rem; text-align: left; border-bottom: 1px solid var(--border); }
+.lang-table tr:last-child > * { border-bottom: 0; }
+.lang-table th { font-weight: 500; }
+.lang-table td { font: 500 .95rem var(--font-mono); color: var(--primary); text-align: right; }
+.lang-note { margin-top: 1rem; font-size: .9rem; color: var(--muted); }
+
+/* ===== 12. Componenti della Tesina ===== */
+.map { display: grid; gap: 1rem; padding: 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+.map-center { margin: 0; padding: 1.5rem; text-align: center; font: 800 1.3rem/1.3 var(--font-title); background: var(--ink); color: #fff; border-radius: var(--radius-sm); }
+.map-nodes { display: grid; gap: 1rem; }
+.map-node { display: block; height: 100%; padding: 1.25rem; text-align: center; font-weight: 600; line-height: 1.5; text-decoration: none; color: var(--ink); background: var(--bg); border: 2px solid var(--border); border-radius: var(--radius-sm); transition: border-color .15s, background .15s; }
+.map-node:hover { border-color: var(--primary); background: var(--marker); color: var(--ink); }
+.map-node small { display: block; font-weight: 400; color: var(--muted); }
+
+.chapter { padding: 2.5rem 0; }
+.chapter + .chapter { border-top: 1px solid var(--border); }
+.chapter:first-of-type { padding-top: 0; }
+.link-theme { padding: 1.25rem 1.5rem; background: var(--surface); border-left: 4px solid var(--primary); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+
+.pdf { display: none; width: 100%; height: 540px; margin-top: 2.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+.note { margin-top: 1rem; font-size: .9rem; color: var(--muted); }
+
+/* ===== 13. Footer ===== */
+.site-footer { padding: 3rem 1.25rem; text-align: center; font-size: .95rem; color: var(--muted); border-top: 1px solid var(--border); }
+.site-footer p { margin: .4rem auto; }
+
+/* ===== 14. Breakpoint ===== */
+/* Tablet */
+@media (min-width: 640px) {
+  .grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .data { grid-template-columns: repeat(3, 1fr); }
+  .map-nodes { grid-template-columns: repeat(2, 1fr); }
+
+  .timeline { gap: 2rem; }
+  .timeline li { grid-template-columns: 9.5rem 1fr; gap: 2rem; }
+  .timeline time { position: relative; padding: 1.85rem 1.5rem 0 0; text-align: right; }
+  .timeline time::after { content: ""; position: absolute; right: -7px; top: 2.1rem; width: 14px; height: 14px; border-radius: 50%; background: var(--primary); border: 3px solid var(--bg); z-index: 1; }
+  .timeline time::before { content: ""; position: absolute; right: -1px; top: 0; bottom: -2rem; width: 2px; background: var(--border); }
+  .timeline li:last-child time::before { bottom: auto; height: 2.1rem; }
+
+  .two-col { columns: 2; column-gap: 2.5rem; display: block; }
+  .two-col li { break-inside: avoid; margin-bottom: .85rem; }
+}
+
+/* Desktop: sidebar affiancata, griglie a 3-4 colonne */
+@media (min-width: 900px) {
+  .site-nav ul { gap: 2.25rem; }
+  .hero { grid-template-columns: 1.2fr 1fr; gap: 4rem; min-height: 70vh; }
+  .split { grid-template-columns: 1.4fr 1fr; gap: 4rem; }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .map-nodes { grid-template-columns: repeat(4, 1fr); }
+  .pdf { display: block; }
+  .project { grid-template-columns: minmax(0, 1fr) 21rem; gap: 4rem; padding: 2.5rem; align-items: start; }
+  .project-demo { display: block; position: sticky; top: calc(var(--header-h) + 1.5rem); }
+
+  .layout { grid-template-columns: 15.5rem minmax(0, 1fr); gap: 4.5rem; }
+  .sidebar { position: sticky; top: calc(var(--header-h) + 1.5rem); align-self: start; }
+  .profile { flex-direction: column; align-items: flex-start; gap: 1.25rem; }
+  .profile .portrait { width: 9.5rem; font-size: 2.2rem; }
+  .toc ul { flex-direction: column; gap: .35rem; }
+  .toc a { padding: .55rem .85rem; background: none; border: 0; border-radius: 8px; }
+  .toc a:hover { background: var(--surface); }
+  .toc a[aria-current="true"] { background: var(--ink); }
+}
+
+/* ===== 15. Preferenze utente e stampa ===== */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+}
+
+@media print {
+  .site-header, .site-footer, .skip-link, .btn, .pdf, .toc, .project-demo { display: none; }
+  body { display: block; background: #fff; font-size: 11pt; }
+  .layout { display: block; padding-top: 1rem; }
+  .sidebar { position: static; margin-bottom: 1.5rem; }
+  .block, .entry, .card, .project, .data div { break-inside: avoid; }
+  a { color: inherit; }
+}

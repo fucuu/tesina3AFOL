@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1f4229">
+    <title>FAMStudio - Gratta e Vinci</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2d5f3f;
+            --primary-dark: #1f4229;
+            --secondary: #e8f5e9;
+            --accent: #66bb6a;
+            --white: #ffffff;
+            --text-dark: #2c3e2f;
+            --text-light: #f1f8f4;
+            --error: #ff6b6b;
+            --radius-xl: 40px;
+            --radius-md: 20px;
+            --glass: rgba(255, 255, 255, 0.95);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            overscroll-behavior: none;
+            background-color: var(--primary-dark);
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-dark);
+            position: fixed;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: 0;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        .blob-1 { top: -10%; right: -10%; width: 300px; height: 300px; background: var(--accent); }
+        .blob-2 { bottom: -10%; left: -10%; width: 250px; height: 250px; background: #0f2b18; }
+
+        .app-wrapper {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            overflow: hidden;
+        }
+
+        .header {
+            text-align: center;
+            margin: 10px auto 10px;
+            color: var(--white);
+            width: 100%;
+            max-width: 400px;
+            flex-shrink: 0;
+        }
+
+        .logo-img {
+            max-width: 140px;
+            height: auto;
+            margin: 0 auto 10px;
+            display: block;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+            background: white;
+            padding: 10px 18px;
+            border-radius: 16px;
+        }
+
+        h1 {
+            font-size: clamp(20px, 5vw, 26px);
+            font-weight: 900;
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            margin-bottom: 2px;
+        }
+
+        .subtitle {
+            font-size: clamp(11px, 3vw, 13px);
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .game-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 0;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            min-height: 0;
+        }
+
+        .scratch-frame {
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 320px;
+            max-height: 45vh; 
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .scratch-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            background: white;
+            transform: translateZ(0);
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .prize-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #fff 0%, #e8f5e9 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            padding: 20px;
+            pointer-events: none;
+        }
+
+        .prize-icon { 
+            font-size: clamp(30px, 8vw, 40px);
+            margin-bottom: 8px; 
+            animation: bounce 2s infinite; 
+        }
+        
+        .prize-text {
+            font-size: clamp(18px, 5vw, 24px);
+            font-weight: 800;
+            color: var(--primary);
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .prize-label {
+            margin-top: 8px;
+            font-size: clamp(9px, 2vw, 11px);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            cursor: pointer;
+            border-radius: 16px;
+            touch-action: none;
+        }
+
+        .hand-hint {
+            margin-top: 15px;
+            color: var(--white);
+            font-size: clamp(12px, 3.5vw, 14px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.15);
+            padding: 8px 16px;
+            border-radius: 50px;
+            backdrop-filter: blur(4px);
+            pointer-events: none;
+            opacity: 0; /* Nascondiamo finché non è pronto */
+            transition: opacity 0.5s;
+        }
+
+        .bottom-sheet {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            padding: 25px 20px 30px;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
+            transform: translateY(120%);
+            transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            z-index: 100;
+            max-height: 90vh;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+        }
+
+        .bottom-sheet.active {
+            transform: translateY(0);
+        }
+
+        .sheet-handle {
+            width: 40px;
+            height: 5px;
+            background: #ddd;
+            border-radius: 10px;
+            margin: 0 auto 20px;
+        }
+
+        .result-title {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        
+        .result-prize-big {
+            font-size: clamp(22px, 6vw, 26px);
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .form-group { 
+            margin-bottom: 15px; 
+            position: relative; 
+        }
+        
+        .form-group label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-left: 12px;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            background: #f4f8f5;
+            border: 2px solid transparent;
+            border-radius: 14px;
+            font-size: 15px;
+            color: var(--text-dark);
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            background: #fff;
+            border-color: var(--accent);
+            box-shadow: 0 4px 15px rgba(102, 187, 106, 0.15);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 15px 0 20px;
+            font-size: 11px;
+            color: #666;
+            line-height: 1.5;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 12px;
+        }
+        
+        .checkbox-group input {
+            margin-top: 2px;
+            width: 18px; 
+            height: 18px;
+            flex-shrink: 0;
+            accent-color: var(--primary);
+        }
+
+        .submit-btn {
+            background: linear-gradient(to right, var(--primary), #3a7a52);
+            color: white;
+            border: none;
+            padding: 16px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 18px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(45, 95, 63, 0.3);
+            transition: transform 0.2s;
+            letter-spacing: 0.5px;
+        }
+
+        .submit-btn:active { transform: scale(0.98); }
+        .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .overlay-view {
+            position: fixed;
+            top: 0; left: 0; 
+            width: 100%; 
+            height: 100%;
+            background: white;
+            z-index: 200;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            text-align: center;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .code-ticket {
+            background: var(--secondary);
+            border: 2px dashed var(--primary);
+            color: var(--primary);
+            padding: 18px 30px;
+            font-family: 'Courier New', monospace;
+            font-size: clamp(22px, 6vw, 28px);
+            font-weight: 900;
+            margin: 25px 0;
+            border-radius: 12px;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .code-ticket::before, .code-ticket::after {
+            content: ''; 
+            position: absolute; 
+            top: 50%; 
+            width: 20px; 
+            height: 20px;
+            background: white; 
+            border-radius: 50%; 
+            transform: translateY(-50%);
+        }
+        .code-ticket::before { left: -10px; }
+        .code-ticket::after { right: -10px; }
+
+        .email-suggestion {
+            background: #e8f5e9;
+            color: var(--primary);
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-top: 5px;
+            border: 1px solid #c8e6c9;
+            cursor: pointer;
+            display: none;
+        }
+        .email-suggestion span { font-weight: bold; text-decoration: underline; }
+
+        .spinner {
+            display: inline-block; 
+            width: 16px; 
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3); 
+            border-radius: 50%;
+            border-top-color: #fff; 
+            animation: spin 1s infinite linear;
+            margin-right: 8px;
+        }
+
+        .footer {
+            flex-shrink: 0;
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 10px;
+            padding: 15px 0;
+        }
+
+        .error-message {
+            color: var(--error);
+            background: #fff0f0;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            margin-bottom: 15px;
+            display: none;
+            border: 1px solid #ffcdcd;
+        }
+
+        .checkbox-group a { 
+            color: var(--primary); 
+            font-weight: 700; 
+        }
+
+        .warning-box {
+            background: #fff9e6;
+            padding: 12px;
+            border-radius: 12px;
+            margin: 15px 0;
+            font-size: 12px;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+            line-height: 1.5;
+        }
+
+        .btn-secondary {
+            background: none;
+            border: none;
+            color: #999;
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: color 0.2s;
+        }
+
+        .btn-secondary:hover {
+            color: #666;
+        }
+
+        .gift-btn {
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 18px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(45, 95, 63, 0.28);
+            transition: transform 0.2s, box-shadow 0.2s;
+            letter-spacing: 0.5px;
+            margin-top: 15px;
+        }
+
+        .gift-btn:active { transform: scale(0.98); }
+        .gift-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        
+        /* Loading overlay per il caricamento iniziale */
+        #loadingOverlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--primary-dark);
+            z-index: 50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        @media (max-width: 360px) {
+            .app-wrapper { padding: 10px; }
+            h1 { font-size: 20px; }
+            .subtitle { font-size: 11px; }
+            .logo-img { max-width: 120px; padding: 8px 14px; }
+        }
+        @media (max-height: 600px) {
+            .scratch-frame { max-width: 200px; }
+            .header { margin-bottom: 5px; }
+            .logo-img { margin-bottom: 5px; }
+            .hand-hint { margin-top: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="app-wrapper">
+        <header class="header" id="mainHeader">
+            <img src="logoFAMStudio.webp" alt="FAMStudio" class="logo-img">
+            <div id="textHeader">
+                <h1>Tenta la Fortuna!</h1>
+                <p class="subtitle">Gratta e scopri il tuo regalo esclusivo</p>
+            </div>
+        </header>
+
+        <main class="game-area" id="gameArea">
+            <div class="scratch-frame">
+                <div class="scratch-container" id="scratchContainer">
+                    <div id="loadingOverlay"><div class="spinner"></div></div>
+                    
+                    <div class="prize-layer" id="prizeLayer">
+                        <div class="prize-icon">🎁</div>
+                        <span class="prize-text" id="prizeValue">...</span>
+                        <span class="prize-label">Hai Vinto!</span>
+                    </div>
+                    <canvas id="scratchCanvas"></canvas>
+                </div>
+            </div>
+            
+            <div class="hand-hint" id="handHint">
+                <span>👆</span> Gratta qui
+            </div>
+        </main>
+
+        <footer class="footer">
+            © 2025 FAM Studio
+        </footer>
+    </div>
+
+    <div class="bottom-sheet" id="formSheet">
+        <div class="sheet-handle"></div>
+        
+        <div class="result-title">Complimenti! Hai vinto:</div>
+        <div class="result-prize-big" id="wonPrizeDisplay"></div>
+
+        <form id="discountForm">
+            <div class="form-group">
+                <label>NOME</label>
+                <input type="text" id="nome" name="nome" required placeholder="Mario">
+            </div>
+
+            <div class="form-group">
+                <label>COGNOME</label>
+                <input type="text" id="cognome" name="cognome" required placeholder="Rossi">
+            </div>
+
+            <div class="form-group">
+                <label>EMAIL</label>
+                <input type="email" id="email" name="email" required placeholder="mario@esempio.com">
+                <div id="emailSuggestion" class="email-suggestion"></div>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="privacy" name="privacy" required>
+                <label for="privacy">Accetto l'<a href="Informativa_Privacy_FAMStudio.pdf" target="_blank">Informativa Privacy</a> e il trattamento dei dati.</label>
+            </div>
+
+            <div class="error-message" id="errorMessage"></div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">Ricevi Codice Premio</button>
+        </form>
+    </div>
+
+    <div class="bottom-sheet" id="giftSheet">
+        <div class="sheet-handle"></div>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <div style="font-size: 40px; margin-bottom: 10px;">🎁</div>
+            <div class="result-title">Regala il tuo premio</div>
+            <div class="result-prize-big" id="giftPrizeDisplay"></div>
+        </div>
+        <form id="giftForm">
+            <div class="form-group">
+                <label>NOME DEL DESTINATARIO</label>
+                <input type="text" id="giftNome" name="giftNome" required placeholder="Mario">
+            </div>
+            <div class="form-group">
+                <label>COGNOME DEL DESTINATARIO</label>
+                <input type="text" id="giftCognome" name="giftCognome" required placeholder="Rossi">
+            </div>
+            <div class="form-group">
+                <label>EMAIL DEL DESTINATARIO</label>
+                <input type="email" id="giftEmail" name="giftEmail" required placeholder="mario@esempio.com">
+                <div id="giftEmailSuggestion" class="email-suggestion"></div>
+            </div>
+            <div class="warning-box">
+                ⚠️ <strong>Attenzione:</strong> Una volta regalato, non potrai più utilizzare questo codice. Il premio sarà trasferito definitivamente al destinatario.
+            </div>
+            <div class="error-message" id="giftErrorMessage"></div>
+            <button type="submit" class="submit-btn" id="giftSubmitBtn">Conferma e Regala</button>
+            <button type="button" class="btn-secondary" id="giftCancelBtn">Annulla</button>
+        </form>
+    </div>
+
+    <div class="overlay-view" id="successMessage">
+        <img src="logoFAMStudio.webp" alt="Logo" style="width: 120px; margin-bottom: 20px; background: white; padding: 15px; border-radius: 12px;">
+        <h2 style="color: var(--primary); font-size: 26px; margin-bottom: 10px;">Evviva! 🎉</h2>
+        <p style="color: #666; margin-bottom: 5px;">Codice generato con successo!</p>
+        
+        <div class="code-ticket" id="displayCodeSuccess">...</div>
+
+        <p style="font-size: 12px; color: #999; max-width: 280px; margin: 0 auto 30px; line-height: 1.5;">
+            <strong>IMPORTANTE:</strong> Fai subito uno screenshot. Ti abbiamo anche inviato una email (controlla anche nello spam).
+        </p>
+        
+        <button onclick="window.location.reload()" style="background:none; border:none; color:var(--primary); font-weight:600; text-decoration:underline; font-size: 14px; padding: 10px; cursor: pointer;">Torna alla Home o regala il tuo Premio</button>
+    </div>
+
+    <div class="overlay-view" id="alreadyUsed">
+        <div style="font-size: 50px; margin-bottom: 15px;">🎟️</div>
+        <h2 style="color: var(--primary); font-size: 22px;" id="alreadyUsedTitle">Hai già partecipato</h2>
+        <p style="color: #666; margin-bottom: 20px; font-size: 14px;" id="alreadyUsedSubtitle">Hai già riscosso un premio con questo dispositivo.</p>
+        
+        <div style="background: #f5f5f5; padding: 20px; border-radius: 16px; width: 100%; max-width: 320px;">
+            <div style="font-size: 11px; text-transform: uppercase; color: #999; margin-bottom: 5px;">Il tuo premio</div>
+            <div style="font-weight: 800; color: var(--primary); font-size: 17px; margin-bottom: 15px;" id="alreadyUsedPrize"></div>
+            
+            <div style="font-size: 11px; text-transform: uppercase; color: #999; margin-bottom: 5px;">Il tuo codice</div>
+            <div style="font-family: monospace; font-size: 18px; font-weight: bold; letter-spacing: 1px; margin-bottom: 20px;" id="alreadyUsedCode"></div>
+            
+            <button type="button" class="gift-btn" id="giftButton">
+                🎁 Regala questo Premio
+            </button>
+        </div>
+        <p style="margin-top: 30px; font-size: 14px;">Ti aspettiamo da FAM Studio!</p>
+    </div>
+
+    <div class="overlay-view" id="giftSuccess">
+        <img src="logoFAMStudio.webp" alt="Logo" style="width: 120px; margin-bottom: 20px; background: white; padding: 15px; border-radius: 12px;">
+        <div style="font-size: 50px; margin-bottom: 15px;">🎁</div>
+        <h2 style="color: var(--primary); font-size: 26px; margin-bottom: 10px;">Regalo Inviato!</h2>
+        <p style="color: #666; margin-bottom: 20px; font-size: 14px; max-width: 280px; line-height: 1.5;">
+            Il tuo premio è stato regalato a <strong id="giftRecipientName"></strong>. 
+            Riceverà un'email con il codice premio.
+        </p>
+        <p style="font-size: 12px; color: #999; max-width: 280px; margin: 0 auto 30px; line-height: 1.5;">
+            Che bel gesto! 💚
+        </p>
+        <button onclick="window.location.reload()" style="background:var(--primary); color: white; border:none; padding: 14px 30px; border-radius: 12px; font-weight:600; font-size: 14px; cursor: pointer;">Torna alla Home o regala il tuo Premio</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, addDoc, doc, getDoc, updateDoc, runTransaction, serverTimestamp, increment } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // ============================================
+        // FIREBASE CONFIGURATION
+        // ============================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyCx8kFOCoMKJLrElWCBJ6LH57JyQ8Gg_0U",
+            authDomain: "famstudio-dbcfb.firebaseapp.com",
+            projectId: "famstudio-dbcfb",
+            storageBucket: "famstudio-dbcfb.firebasestorage.app",
+            messagingSenderId: "948169805700",
+            appId: "1:948169805700:web:505798a246b606d6f517d1"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        emailjs.init("VKSjfZv6e8Jywty6H");
+        const GIFT_TEMPLATE_ID = "template_bc8fq6u"; 
+        const WIN_TEMPLATE_ID = "template_hfzk3vd";
+
+        // ============================================
+        // CONSTANTS & VARIABLES
+        // ============================================
+        const DOMAINS_LIST = ["gmail.com", "yahoo.com", "yahoo.it", "hotmail.com", "hotmail.it", "libero.it", "outlook.com", "outlook.it", "icloud.com", "virgilio.it", "tiscali.it", "live.it", "live.com", "alice.it"];
+        
+        let selectedPrize = null;
+        const SCRATCH_THRESHOLD = 50;
+
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
+        function checkDeviceUsed() {
+            return localStorage.getItem('famstudio_used') === 'true';
+        }
+
+        function getUserData() {
+            let prizeData = localStorage.getItem('famstudio_prize');
+            try { prizeData = JSON.parse(prizeData); } catch(e) { prizeData = { text: prizeData, type: 'unknown' }; }
+            return { 
+                code: localStorage.getItem('famstudio_code'), 
+                prize: prizeData,
+                gifted: localStorage.getItem('famstudio_gifted') === 'true',
+                docId: localStorage.getItem('famstudio_docid'),
+                senderName: localStorage.getItem('famstudio_user_name')
+            };
+        }
+        
+        function markAsGifted() { localStorage.setItem('famstudio_gifted', 'true'); }
+
+        function levenshteinDistance(a, b) {
+            if (a.length === 0) return b.length;
+            if (b.length === 0) return a.length;
+            const matrix = [];
+            for (let i = 0; i <= b.length; i++) { matrix[i] = [i]; }
+            for (let j = 0; j <= a.length; j++) { matrix[0][j] = j; }
+            for (let i = 1; i <= b.length; i++) {
+                for (let j = 1; j <= a.length; j++) {
+                    if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                        matrix[i][j] = matrix[i - 1][j - 1];
+                    } else {
+                        matrix[i][j] = Math.min(matrix[i - 1][j - 1] + 1, Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1));
+                    }
+                }
+            }
+            return matrix[b.length][a.length];
+        }
+
+        function suggestEmailCorrection(email) {
+            if (!email.includes('@')) return null;
+            const parts = email.split('@');
+            if (parts.length !== 2 || parts[1].length < 2 || DOMAINS_LIST.includes(parts[1].toLowerCase())) return null;
+            let bestMatch = null, minDistance = Infinity;
+            for (const domain of DOMAINS_LIST) {
+                const distance = levenshteinDistance(parts[1].toLowerCase(), domain);
+                if (distance > 0 && distance <= 2 && distance < minDistance) {
+                    minDistance = distance;
+                    bestMatch = domain;
+                }
+            }
+            return bestMatch ? `${parts[0]}@${bestMatch}` : null;
+        }
+
+        function markDeviceUsed(code, prize, docId, userName) {
+            localStorage.setItem('famstudio_used', 'true');
+            localStorage.setItem('famstudio_code', code);
+            localStorage.setItem('famstudio_prize', JSON.stringify(prize));
+            localStorage.setItem('famstudio_gifted', 'false');
+            if (docId) localStorage.setItem('famstudio_docid', docId);
+            if (userName) localStorage.setItem('famstudio_user_name', userName);
+        }
+
+        async function generateUniqueCode() { 
+            return `FAM-${Math.random().toString(36).substr(2, 4).toUpperCase()}-${Date.now().toString().substr(-4)}`; 
+        }
+
+        // ============================================
+        // PRIZE SELECTION (WITH LIVE DB CHECK)
+        // ============================================
+        async function determinePrizePoolAndSelect() {
+            // Controlla se c'è un premio "in sospeso" (utente ha ricaricato pagina)
+            const pendingPrize = localStorage.getItem('famstudio_pending_prize');
+            if (pendingPrize) {
+                try { return JSON.parse(pendingPrize); } catch(e) { localStorage.removeItem('famstudio_pending_prize'); }
+            }
+
+            // CHECK DATABASE PRIMA DEL GIOCO
+            let prizesConfig = [];
+            try {
+                const statsRef = doc(db, "counters", "prizes");
+                const docSnap = await getDoc(statsRef);
+                const stats = docSnap.exists() ? docSnap.data() : { massaggio_count: 0 };
+                
+                // LOGICA DINAMICA:
+                // Se i massaggi sono finiti (>= 5), li rimuoviamo dal pool.
+                if ((stats.massaggio_count || 0) >= 5) {
+                    prizesConfig = [
+                        { text: "Ingresso Omaggio Slot", type: "slot", weight: 70 },
+                        { text: "Buono Sconto 10€", type: "buono", weight: 30 }
+                    ];
+                } else {
+                    // MODIFICA QUI: AUMENTATA PROBABILITÀ MASSAGGIO (da 4 a 20)
+                    // Diminuito Slot da 70 a 60
+                    // Diminuito Buono da 26 a 20
+                    prizesConfig = [
+                        { text: "Ingresso Omaggio Slot", type: "slot", weight: 60 },
+                        { text: "Buono Sconto 10€", type: "buono", weight: 20 },
+                        { text: "Massaggio Massoterapico", type: "massaggio", limit: 5, weight: 20 }
+                    ];
+                }
+            } catch (error) {
+                console.error("Errore fetch stats, fallback sicuro:", error);
+                // Fallback sicuro se DB offline: niente massaggi
+                prizesConfig = [
+                    { text: "Ingresso Omaggio Slot", type: "slot", weight: 70 },
+                    { text: "Buono Sconto 10€", type: "buono", weight: 30 }
+                ];
+            }
+
+            // Selezione pesata
+            let random = Math.random() * 100;
+            let cumulativeWeight = 0;
+            let selected = prizesConfig[0];
+
+            for (const p of prizesConfig) {
+                cumulativeWeight += p.weight;
+                if (random <= cumulativeWeight) {
+                    selected = p;
+                    break;
+                }
+            }
+            
+            localStorage.setItem('famstudio_pending_prize', JSON.stringify(selected));
+            return selected;
+        }
+
+        // ============================================
+        // EMAIL & FORM HELPERS
+        // ============================================
+        const emailInput = document.getElementById('email');
+        const suggestionBox = document.getElementById('emailSuggestion');
+        const giftEmailInput = document.getElementById('giftEmail');
+        const giftSuggestionBox = document.getElementById('giftEmailSuggestion');
+
+        function setupEmailSuggestion(inputEl, suggestionEl) {
+            inputEl.addEventListener('input', () => {
+                const val = inputEl.value.trim();
+                if (val.includes('@') && val.split('@')[1].length > 1) {
+                    const suggestion = suggestEmailCorrection(val);
+                    if (suggestion) {
+                        suggestionEl.innerHTML = `Forse intendevi: <span>${suggestion}</span>?`;
+                        suggestionEl.style.display = 'block';
+                        suggestionEl.onclick = () => {
+                            inputEl.value = suggestion;
+                            suggestionEl.style.display = 'none';
+                            inputEl.focus();
+                        };
+                    } else { suggestionEl.style.display = 'none'; }
+                } else { suggestionEl.style.display = 'none'; }
+            });
+        }
+        setupEmailSuggestion(emailInput, suggestionBox);
+        setupEmailSuggestion(giftEmailInput, giftSuggestionBox);
+
+        const giftCancelBtn = document.getElementById('giftCancelBtn');
+        if (giftCancelBtn) {
+            giftCancelBtn.addEventListener('click', function() {
+                document.getElementById('giftSheet').classList.remove('active');
+                if (checkDeviceUsed()) { document.getElementById('alreadyUsed').style.display = 'flex'; }
+                document.getElementById('giftForm').reset();
+                document.getElementById('giftErrorMessage').style.display = 'none';
+                giftSuggestionBox.style.display = 'none';
+            });
+        }
+
+        // ============================================
+        // SCRATCH CANVAS SETUP
+        // ============================================
+        const canvas = document.getElementById('scratchCanvas');
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        const container = document.getElementById('scratchContainer');
+        const prizeValueEl = document.getElementById('prizeValue');
+
+        let isScratching = false;
+        let isRevealed = false;
+        let hasStartedScratching = false;
+
+        function initCanvas() {
+            if (hasStartedScratching || isRevealed) return;
+
+            const rect = container.getBoundingClientRect();
+            if (rect.width === 0 || rect.height === 0) return;
+
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            canvas.style.width = rect.width + 'px';
+            canvas.style.height = rect.height + 'px';
+            ctx.scale(dpr, dpr);
+            
+            ctx.fillStyle = '#2d5f3f';
+            ctx.fillRect(0, 0, rect.width, rect.height);
+            
+            ctx.fillStyle = '#3a7a52';
+            for(let i=0; i<20; i++) {
+                ctx.beginPath();
+                ctx.arc(Math.random()*rect.width, Math.random()*rect.height, Math.random()*20, 0, Math.PI*2);
+                ctx.fill();
+            }
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = `900 ${rect.width * 0.1}px Poppins`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('GRATTA', rect.width / 2, rect.height / 2 - rect.height * 0.07);
+            ctx.fillText('QUI', rect.width / 2, rect.height / 2 + rect.height * 0.07);
+        }
+
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            let clientX = e.clientX;
+            let clientY = e.clientY;
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            }
+            return { x: clientX - rect.left, y: clientY - rect.top };
+        }
+
+        function scratch(x, y) {
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(x, y, 30, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function calculateScratchedPercentage() {
+            const width = canvas.width;
+            const height = canvas.height;
+            const imageData = ctx.getImageData(0, 0, width, height);
+            const data = imageData.data;
+            let transparentPixels = 0;
+            for (let i = 3; i < data.length; i += 16) {
+                if (data[i] === 0) transparentPixels++;
+            }
+            return (transparentPixels / (data.length / 16)) * 100;
+        }
+
+        function startScratch(e) { 
+            if (e.cancelable) e.preventDefault();
+            isScratching = true; 
+            hasStartedScratching = true;
+            const pos = getMousePos(e); 
+            scratch(pos.x, pos.y); 
+        }
+
+        function moveScratch(e) {
+            if (!isScratching || isRevealed) return;
+            if (e.cancelable) e.preventDefault();
+            const pos = getMousePos(e);
+            scratch(pos.x, pos.y);
+            
+            if (calculateScratchedPercentage() > SCRATCH_THRESHOLD) {
+                revealPrize();
+            }
+        }
+
+        function endScratch() { isScratching = false; }
+
+        canvas.addEventListener('mousedown', startScratch);
+        canvas.addEventListener('touchstart', startScratch, {passive: false});
+        window.addEventListener('mousemove', moveScratch);
+        window.addEventListener('touchmove', moveScratch, {passive: false});
+        window.addEventListener('mouseup', endScratch);
+        window.addEventListener('touchend', endScratch);
+
+        function revealPrize() {
+            if (isRevealed) return;
+            isRevealed = true;
+            canvas.style.transition = 'opacity 1s';
+            canvas.style.opacity = '0';
+            
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#66bb6a', '#ffffff', '#2d5f3f'] });
+            
+            setTimeout(() => {
+                canvas.style.display = 'none';
+                document.getElementById('wonPrizeDisplay').textContent = selectedPrize.text;
+                document.getElementById('formSheet').classList.add('active');
+            }, 800);
+        }
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        window.addEventListener('load', async () => {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            
+            if (checkDeviceUsed()) {
+                loadingOverlay.style.display = 'none';
+                const userData = getUserData();
+                if (userData.gifted) {
+                    document.getElementById('alreadyUsedTitle').textContent = "Premio Regalato";
+                    document.getElementById('alreadyUsedSubtitle').textContent = "Hai regalato il tuo premio, non puoi più usufruirne.";
+                    const giftBtn = document.getElementById('giftButton');
+                    if (giftBtn) giftBtn.style.display = 'none';
+                }
+                
+                document.getElementById('alreadyUsed').style.display = 'flex';
+                let prizeText = userData.prize.text || userData.prize;
+                document.getElementById('alreadyUsedPrize').textContent = prizeText;
+                document.getElementById('alreadyUsedCode').textContent = userData.code;
+
+                const giftButton = document.getElementById('giftButton');
+                if (giftButton && !userData.gifted) {
+                    giftButton.addEventListener('click', () => {
+                        document.getElementById('alreadyUsed').style.display = 'none';
+                        document.getElementById('giftPrizeDisplay').textContent = prizeText;
+                        document.getElementById('giftSheet').classList.add('active');
+                    });
+                }
+            } else {
+                // Inizializza e carica il premio prima di nascondere il loading
+                initCanvas();
+                selectedPrize = await determinePrizePoolAndSelect();
+                prizeValueEl.textContent = selectedPrize.text;
+                loadingOverlay.style.display = 'none'; // Nascondi loading solo ora
+                document.getElementById('handHint').style.opacity = '1';
+            }
+        });
+
+        window.addEventListener('resize', initCanvas);
+
+        // ============================================
+        // FORM SUBMISSION (WITH SILENT FALLBACK)
+        // ============================================
+        document.getElementById('discountForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            btn.innerHTML = '<span class="spinner"></span> Attendere...';
+            btn.disabled = true;
+            errorMsg.style.display = 'none';
+
+            const formData = {
+                nome: document.getElementById('nome').value.trim(),
+                cognome: document.getElementById('cognome').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                privacy: document.getElementById('privacy').checked,
+                prize: selectedPrize.text,
+                prizeType: selectedPrize.type,
+                timestamp: serverTimestamp() 
+            };
+
+            try {
+                const code = await generateUniqueCode();
+                formData.code = code;
+
+                const newVincitaRef = doc(collection(db, "vincite")); 
+                const statsRef = doc(db, "counters", "prizes"); 
+
+                await runTransaction(db, async (transaction) => {
+                    const statsDoc = await transaction.get(statsRef);
+                    if (!statsDoc.exists()) {
+                        transaction.set(statsRef, { slot_count: 0, buono_count: 0, massaggio_count: 0 });
+                    }
+
+                    const stats = statsDoc.exists() ? statsDoc.data() : { slot_count: 0, buono_count: 0, massaggio_count: 0 };
+                    let currentCount = stats[`${formData.prizeType}_count`] || 0;
+                    
+                    // SILENT FALLBACK: Se siamo nel caso sfortunato in cui 
+                    // il controllo frontend è passato ma qualcuno ha rubato l'ultimo massaggio
+                    if (formData.prizeType === 'massaggio' && currentCount >= 5) {
+                        // Cambiamo silenziosamente il premio in buono
+                        formData.prize = "Buono Sconto 10€";
+                        formData.prizeType = "buono";
+                        currentCount = stats['buono_count'] || 0;
+                        console.log("Downgrade silenzioso attivato");
+                    }
+
+                    transaction.set(newVincitaRef, formData);
+                    transaction.update(statsRef, { 
+                        [`${formData.prizeType}_count`]: increment(1) 
+                    });
+                });
+                
+                // Salviamo quello che è stato EFFETTIVAMENTE scritto nel DB (potrebbe essere cambiato)
+                markDeviceUsed(code, { text: formData.prize, type: formData.prizeType }, newVincitaRef.id, formData.nome);
+                localStorage.removeItem('famstudio_pending_prize');
+
+                document.getElementById('formSheet').classList.remove('active');
+                document.getElementById('displayCodeSuccess').textContent = code;
+                document.getElementById('successMessage').style.display = 'flex';
+                confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+
+                emailjs.send("service_0by2gpw", WIN_TEMPLATE_ID, {
+                    to_email: formData.email, 
+                    to_name: formData.nome,   
+                    prize: formData.prize,    
+                    code: code                
+                }).catch(err => console.error("Email err:", err));
+
+            } catch (error) {
+                console.error("Errore vincita:", error);
+                errorMsg.textContent = "Errore di connessione. Riprova.";
+                errorMsg.style.display = 'block';
+                btn.innerHTML = 'Ricevi Codice Premio';
+                btn.disabled = false;
+            }
+        });
+
+        // ============================================
+        // GIFT FORM
+        // ============================================
+        document.getElementById('giftForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('giftSubmitBtn');
+            const errorMsg = document.getElementById('giftErrorMessage');
+            
+            btn.innerHTML = '<span class="spinner"></span> Invio regalo...';
+            btn.disabled = true;
+            errorMsg.style.display = 'none';
+
+            const userData = getUserData();
+            if (!userData.docId) {
+                errorMsg.textContent = "Errore: documento non trovato.";
+                btn.disabled = false; return;
+            }
+
+            const giftData = {
+                giftedAt: serverTimestamp(),
+                giftedToNome: document.getElementById('giftNome').value.trim(),
+                giftedToCognome: document.getElementById('giftCognome').value.trim(),
+                giftedToEmail: document.getElementById('giftEmail').value.trim()
+            };
+
+            try {
+                const docRef = doc(db, "vincite", userData.docId);
+                const docSnap = await getDoc(docRef);
+                let originalName = docSnap.exists() ? docSnap.data().nome : "Un amico";
+
+                await updateDoc(docRef, giftData);
+                
+                await emailjs.send("service_0by2gpw", GIFT_TEMPLATE_ID, {
+                    to_email: giftData.giftedToEmail, 
+                    to_name: giftData.giftedToNome,   
+                    prize: userData.prize.text || userData.prize, 
+                    code: userData.code,
+                    sender_name: originalName
+                });
+
+                markAsGifted();
+                document.getElementById('giftSheet').classList.remove('active');
+                document.getElementById('giftRecipientName').textContent = giftData.giftedToNome;
+                document.getElementById('giftSuccess').style.display = 'flex';
+                confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+
+            } catch (error) {
+                console.error("Errore Regalo:", error);
+                errorMsg.textContent = "Errore durante l'invio. Riprova.";
+                errorMsg.style.display = 'block';
+                btn.innerHTML = 'Conferma e Regala';
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

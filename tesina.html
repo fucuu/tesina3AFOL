@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tesina | Alessandro Arena</title>
+  <meta name="description" content="[Inserisci Titolo Tesina]: tesina di Alessandro Arena, classe 3ª Informatica.">
+  <meta name="theme-color" content="#F2F5FA">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232745F5'/%3E%3Ctext x='32' y='41' font-family='sans-serif' font-size='24' font-weight='800' text-anchor='middle' fill='white'%3EA.A.%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Vai al contenuto</a>
+
+  <header class="site-header">
+    <a class="logo" href="index.html">A.A.<span class="sr-only"> – Alessandro Arena, Home</span></a>
+    <nav class="site-nav" aria-label="Navigazione principale">
+      <ul role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="cv.html">CV</a></li>
+        <li><a href="tesina.html" aria-current="page">Tesina</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="page-hero">
+      <div class="container">
+        <p class="eyebrow">Tesina · Anno scolastico 2026/27</p>
+        <h1>[Inserisci Titolo Tesina]</h1>
+        <p class="lead">[Inserisci Sottotitolo]</p>
+      </div>
+    </section>
+
+    <div class="container layout">
+      <div class="sidebar">
+        <nav class="toc" aria-label="Indice della tesina">
+          <h2 class="toc-title">Indice</h2>
+          <ul role="list">
+            <li><a href="#abstract">Abstract</a></li>
+            <li><a href="#mappa">Mappa dei collegamenti</a></li>
+            <li><a href="#capitoli">Capitoli</a></li>
+            <li><a href="#download">Download</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="content">
+        <section id="abstract" class="block highlight">
+          <h2>Abstract</h2>
+          <p>[Spiega in 5-8 righe perché hai scelto il tema, cosa approfondisci e come colleghi le materie.]</p>
+        </section>
+
+        <section id="mappa" class="block">
+          <h2>Mappa dei collegamenti</h2>
+          <div class="map">
+            <p class="map-center">[Tema Centrale]</p>
+            <ul class="map-nodes" role="list">
+              <li><a class="map-node" href="#materia-1">[Materia 1]<small>[Collegamento]</small></a></li>
+              <li><a class="map-node" href="#materia-2">[Materia 2]<small>[Collegamento]</small></a></li>
+              <li><a class="map-node" href="#materia-3">[Materia 3]<small>[Collegamento]</small></a></li>
+              <li><a class="map-node" href="#materia-4">[Materia 4]<small>[Collegamento]</small></a></li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="capitoli" class="block">
+          <h2>Capitoli</h2>
+          <article id="materia-1" class="chapter">
+            <header>
+              <p class="eyebrow">Capitolo 1</p>
+              <h3>[Materia 1]</h3>
+            </header>
+            <p>[Descrizione Capitolo 1]</p>
+            <p class="link-theme"><strong>Collegamento al tema:</strong> [Spiega il legame con il tema centrale.]</p>
+          </article>
+          <article id="materia-2" class="chapter">
+            <header>
+              <p class="eyebrow">Capitolo 2</p>
+              <h3>[Materia 2]</h3>
+            </header>
+            <p>[Descrizione Capitolo 2]</p>
+            <p class="link-theme"><strong>Collegamento al tema:</strong> [Spiega il legame con il tema centrale.]</p>
+          </article>
+          <article id="materia-3" class="chapter">
+            <header>
+              <p class="eyebrow">Capitolo 3</p>
+              <h3>[Materia 3]</h3>
+            </header>
+            <p>[Descrizione Capitolo 3]</p>
+            <p class="link-theme"><strong>Collegamento al tema:</strong> [Spiega il legame con il tema centrale.]</p>
+          </article>
+          <article id="materia-4" class="chapter">
+            <header>
+              <p class="eyebrow">Capitolo 4</p>
+              <h3>[Materia 4]</h3>
+            </header>
+            <p>[Descrizione Capitolo 4]</p>
+            <p class="link-theme"><strong>Collegamento al tema:</strong> [Spiega il legame con il tema centrale.]</p>
+          </article>
+        </section>
+
+        <section id="download" class="block">
+          <h2>Scarica e consulta</h2>
+          <div class="grid grid-2">
+            <article class="card">
+              <h3>Tesina completa</h3>
+              <p>Documento in formato PDF.</p>
+              <a class="btn btn-primary" href="assets/tesina.pdf" download>Scarica il PDF</a>
+            </article>
+            <article class="card">
+              <h3>Slide di presentazione</h3>
+              <p>Presentazione per l'esposizione orale.</p>
+              <a class="btn btn-secondary" href="assets/slide.pdf" target="_blank" rel="noopener">Apri le slide<span class="sr-only"> (si apre in una nuova scheda)</span></a>
+            </article>
+          </div>
+          <iframe class="pdf" src="assets/tesina.pdf" title="Anteprima PDF della tesina" loading="lazy"></iframe>
+          <p class="note">Su schermi piccoli l'anteprima non viene mostrata: usa i pulsanti qui sopra.</p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>© <span id="year">2026</span> Alessandro Arena · CFP Afolmet · Classe 3ª · Indirizzo Informatica</p>
+    <p><a href="mailto:alessandro.arena13@gmail.com">alessandro.arena13@gmail.com</a></p>
+  </footer>
+</body>
+</html>

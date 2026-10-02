@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alessandro Arena | Portfolio e Tesina</title>
+  <meta name="description" content="Sito personale, CV e tesina di Alessandro Arena, studente di Informatica.">
+  <meta name="theme-color" content="#F2F5FA">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232745F5'/%3E%3Ctext x='32' y='41' font-family='sans-serif' font-size='24' font-weight='800' text-anchor='middle' fill='white'%3EA.A.%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Vai al contenuto</a>
+
+  <header class="site-header">
+    <a class="logo" href="index.html">A.A.<span class="sr-only"> – Alessandro Arena, Home</span></a>
+    <nav class="site-nav" aria-label="Navigazione principale">
+      <ul role="list">
+        <li><a href="index.html" aria-current="page">Home</a></li>
+        <li><a href="cv.html">CV</a></li>
+        <li><a href="tesina.html">Tesina</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="container hero">
+      <div class="hero-text">
+        <p class="eyebrow">Studente di Informatica · Classe 3ª</p>
+        <h1>Ciao, sono <span class="hl">Alessandro Arena</span>.</h1>
+        <p class="lead">Mi appassiona l'hardware, il software e il supporto tecnico: voglio trasformare la passione per la tecnologia in abilità pratiche. Qui trovi il mio CV e la tesina: [Inserisci Titolo Tesina].</p>
+        <div class="cta-group">
+          <a class="btn btn-primary" href="tesina.html">Leggi la tesina</a>
+          <a class="btn btn-secondary" href="cv.html">Vedi il CV</a>
+        </div>
+      </div>
+      <div class="portrait portrait-lg">
+        <span aria-hidden="true">A.A.</span>
+        <img src="assets/foto.jpg" alt="Ritratto di Alessandro Arena" width="360" height="360" fetchpriority="high">
+      </div>
+    </section>
+
+    <section class="section" id="chi-sono">
+      <div class="container split">
+        <div>
+          <h2>Chi sono</h2>
+          <p>Frequento il corso di Istruzione e Formazione Professionale (IeFP) in informatica al CFP Afolmet. Dopo un anno di orientamento ho scelto con convinzione il settore tecnologico. Sono puntuale, imparo in fretta e voglio rafforzare le mie competenze con esperienze pratiche.</p>
+        </div>
+        <ul class="facts" role="list">
+          <li><strong>2026/27</strong> anno scolastico</li>
+          <li><strong>IeFP</strong> corso di studi</li>
+          <li><strong>EQF 3</strong> livello di formazione</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section alt" id="anteprima">
+      <div class="container">
+        <h2 class="section-title">Cosa trovi nel sito</h2>
+        <div class="grid grid-2">
+          <article class="card">
+            <h3>Curriculum Vitae</h3>
+            <p>Percorso di studi, competenze tecniche e trasversali, lingue e contatti.</p>
+            <ul class="badges" role="list">
+              <li>Manutenzione hardware</li>
+              <li>HTML/CSS</li>
+              <li>Windows</li>
+            </ul>
+            <a class="btn btn-secondary" href="cv.html">Apri il CV</a>
+          </article>
+          <article class="card">
+            <h3>Tesina: [Inserisci Titolo Tesina]</h3>
+            <p>[Introduzione breve alla tesina: tema scelto e materie collegate.]</p>
+            <ul class="badges" role="list">
+              <li>[Materia 1]</li>
+              <li>[Materia 2]</li>
+              <li>[Materia 3]</li>
+            </ul>
+            <a class="btn btn-primary" href="tesina.html">Apri la tesina</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="competenze">
+      <div class="container">
+        <h2 class="section-title">Competenze in breve</h2>
+        <div class="grid grid-3">
+          <article class="card">
+            <h3>Hardware</h3>
+            <p>Manutenzione e assistenza tecnica hardware.</p>
+          </article>
+          <article class="card">
+            <h3>Programmazione e web</h3>
+            <p>Basi di programmazione e sviluppo con HTML e CSS.</p>
+          </article>
+          <article class="card">
+            <h3>Sistemi e Office</h3>
+            <p>Uso di Windows e del pacchetto Office (Word, Excel, PowerPoint).</p>
+          </article>
+        </div>
+      </div>
+    </section>
+    <section class="section alt" id="progetti">
+      <div class="container">
+        <h2 class="section-title">Progetti</h2>
+
+        <article class="project">
+          <div class="project-body">
+            <p class="eyebrow">Progetto 1 · Web app</p>
+            <h3>FAMStudio · Gratta e Vinci</h3>
+            <p>Un gratta e vinci digitale che ho realizzato per FAMStudio. Si usa da telefono: il cliente gratta la scheda con il dito, scopre il premio, lascia i suoi dati e riceve un codice premio via email.</p>
+
+            <h4>Come funziona</h4>
+            <ol class="steps" role="list">
+              <li><strong>Si gratta.</strong> La copertura è un elemento canvas: quando ne viene tolta più della metà, il premio appare con i coriandoli.</li>
+              <li><strong>Il premio è a sorte.</strong> Ingresso omaggio slot, buono sconto da 10 € o massaggio, ognuno con la sua probabilità. I massaggi sono solo 5: finiti quelli, escono dal gioco.</li>
+              <li><strong>Si lasciano i dati.</strong> Nome, cognome ed email. Se il dominio è sbagliato (per esempio gmial.com) il form suggerisce la correzione.</li>
+              <li><strong>Arriva il codice.</strong> Compare a schermo (tipo FAM-AB12-3456) e viene spedito per email con EmailJS.</li>
+              <li><strong>Un premio per dispositivo.</strong> Il browser ricorda che hai già giocato. Il premio si può regalare a un amico: lui riceve il codice, tu non puoi più usarlo.</li>
+            </ol>
+
+            <h4>Come ho configurato Firebase</h4>
+            <ul class="check-list" role="list">
+              <li>Ho creato un progetto Firebase, ci ho registrato un'app web e copiato la configurazione nel codice. Uso solo <strong>Cloud Firestore</strong>, caricato da CDN come modulo JavaScript: non ho un server mio.</li>
+              <li>La collezione <code>vincite</code> ha un documento per ogni vincita: dati, premio, codice e data presa dal server. Se il premio viene regalato, si aggiungono i dati del destinatario.</li>
+              <li>Il documento <code>counters/prizes</code> conta i premi assegnati. Lo leggo prima dell'estrazione per sapere se i massaggi sono finiti.</li>
+              <li>Il salvataggio usa una <strong>transazione</strong>: controllo il contatore, salvo la vincita e lo aumento in un'unica operazione. Così due persone non possono prendere l'ultimo massaggio; se succede, il premio diventa in automatico un buono sconto.</li>
+            </ul>
+
+            <ul class="badges project-tags" role="list">
+              <li>HTML/CSS</li>
+              <li>JavaScript</li>
+              <li>Firebase Firestore</li>
+              <li>EmailJS</li>
+            </ul>
+
+            <div class="cta-group">
+              <a class="btn btn-primary" href="progetto1.html" target="_blank" rel="noopener">Apri il progetto<span class="sr-only"> (si apre in una nuova scheda)</span></a>
+            </div>
+          </div>
+
+          <div class="project-demo">
+            <div class="phone">
+              <iframe src="progetto1.html" title="Anteprima giocabile del Gratta e Vinci" loading="lazy"></iframe>
+            </div>
+            <div class="demo-actions">
+              <button type="button" class="btn btn-secondary btn-sm" id="reset-demo">Reimposta il test</button>
+            </div>
+            <p class="note" id="reset-status" role="status">È il progetto vero: puoi provare a grattare qui. Dopo la prima partita usa "Reimposta il test" per rigiocare.</p>
+          </div>
+        </article>
+
+        <article class="card project-next">
+          <h3>[Nome Progetto 2]</h3>
+          <p>[Descrizione.]</p>
+          <p class="tags">[Tecnologia 1] · [Tecnologia 2]</p>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>© <span id="year">2026</span> Alessandro Arena · CFP Afolmet · Classe 3ª · Indirizzo Informatica</p>
+    <p><a href="mailto:alessandro.arena13@gmail.com">alessandro.arena13@gmail.com</a></p>
+  </footer>
+</body>
+</html>
